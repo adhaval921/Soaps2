@@ -20,9 +20,33 @@ namespace Soaps.Controllers
         }
 
         // GET: Soaps
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string soapType, string searchString)
         {
-            return View(await _context.soap.ToListAsync());
+            // Use LINQ to get list of genres.
+            IQueryable<string> genreQuery = from m in _context.soap
+                                            orderby m.Type
+                                            select m.Type;
+
+            var soapS = from m in _context.soap
+                         select m;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                soapS = soapS.Where(s => s.Title.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(soapType))
+            {
+                soapS = soapS.Where(x => x.Type == soapType);
+            }
+
+            var soapTypeVM = new SoapTypeViewModel
+            {
+                Type = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Soaps = await soapS.ToListAsync()
+            };
+
+            return View(soapTypeVM);
         }
 
         // GET: Soaps/Details/5
@@ -54,7 +78,7 @@ namespace Soaps.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Company,ReleaseDate,Type,Colour,Price")] soap soap)
+        public async Task<IActionResult> Create([Bind("Id,Title,Company,ReleaseDate,Type,Colour,Price,Rating")] soap soap)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +110,7 @@ namespace Soaps.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Company,ReleaseDate,Type,Colour,Price")] soap soap)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Company,ReleaseDate,Type,Colour,Price,Rating")] soap soap)
         {
             if (id != soap.Id)
             {
