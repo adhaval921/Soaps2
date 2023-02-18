@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MvcSoaps.Data;
 using Soaps.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace Soaps
 {
@@ -28,12 +30,19 @@ namespace Soaps
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    //options.UseSqlServer(
+                    //Configuration.GetConnectionString("DefaultConnection")));
+                    options.UseSqlServer(Configuration.GetConnectionString("MvcSoapContext")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            //services.AddDbContext<MvcSoapsContext>(options =>
+                    //options.UseSqlServer(Configuration.GetConnectionString("MvcSoapsContext")));
+
+            services.AddDbContext<SoapsContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("SoapsContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
