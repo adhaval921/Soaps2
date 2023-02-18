@@ -28,7 +28,7 @@ namespace MvcMovie.Models
                         Title = "Cool Fresh",
                         Company = "Detol",
                         ReleaseDate = DateTime.Parse("1920-2-12"),
-                        Type = "Anti-becterial",
+                        Type = "Antibecterial",
                         Colour = "Blue",
                         Price = 7.99M,
                         Rating = 4
@@ -83,7 +83,7 @@ namespace MvcMovie.Models
                         Title = "Kitanu",
                         Company = "Life Boy",
                         ReleaseDate = DateTime.Parse("2017-5-4"),
-                        Type = "Anti-becterial",
+                        Type = "Antibecterial",
                         Colour = "Red",
                         Price = 17M,
                         Rating = 1
